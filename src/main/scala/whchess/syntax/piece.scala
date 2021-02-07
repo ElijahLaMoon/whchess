@@ -1,32 +1,32 @@
 package whchess.syntax
 
 import whchess.domain._
-import Color._
 import Square._
-import PieceType._
+import Piece._
 
 import square._
 
 object piece {
   implicit class PieceOps(piece: Piece) {
-    def squares: Set[Square] = piece.color match {
-      case White => piece.pType match {
-        case King   => Set(E1)
-        case Queen  => Set(D1)
-        case Bishop => Set(C1, F1)
-        case Knight => Set(B1, G1)
-        case Rook   => Set(A1, H1)
-        case Pawn   => Square.values.filter(A2.isOnSameRow).toSet
-      }
 
-      case Black => piece.pType match {
-        case King   => Set(E8)
-        case Queen  => Set(D8)
-        case Bishop => Set(C8, F8)
-        case Knight => Set(B8, G8)
-        case Rook   => Set(A8, H8)
-        case Pawn   => Square.values.filter(A7.isOnSameRow).toSet
-      }
+    lazy val initialSquares: Vector[Square] = piece match {
+
+      case `White King`   => Vector(E1)
+      case `Black King`   => Vector(E8)
+      case `White Queen`  => Vector(D1)
+      case `Black Queen`  => Vector(D8)
+      case `White Bishop` => Vector(C1, F1)
+      case `Black Bishop` => Vector(C8, F8)
+      case `White Knight` => Vector(B1, G1)
+      case `Black Knight` => Vector(B8, G8)
+      case `White Rook`   => Vector(A1, H1)
+      case `Black Rook`   => Vector(A8, H8)
+      case `White Pawn`   => pawnSquares(A2)
+      case `Black Pawn`   => pawnSquares(A7)
     }
+
+    // private members
+    private def pawnSquares(square: Square): Vector[Square] =
+      (Square.values filter square.isOnSameRow).toVector
   }
 }
