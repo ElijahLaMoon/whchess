@@ -2,6 +2,7 @@ package whchess.domain
 
 import Color._
 import Board.Positions
+import whchess.syntax.piece._
 
 import cats.data.Writer
 
