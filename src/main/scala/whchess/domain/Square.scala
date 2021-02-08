@@ -11,6 +11,10 @@ sealed abstract class Square(val file: File, val rank: Rank) extends EnumEntry {
 
 object Square extends Enum[Square] {
 
+  def lookupSquare(file: File, rank: Rank): Square = values
+    .find(s => s.file == file && s.rank == rank)
+    .get
+
   case object A1 extends Square(A, `1`)
   case object A2 extends Square(A, `2`)
   case object A3 extends Square(A, `3`)
