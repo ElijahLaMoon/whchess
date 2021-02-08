@@ -57,14 +57,10 @@ object square {
       val file = reversedFiles.get(newFileIndex)
       val rank = reversedRanks.get(newRankIndex)
 
-      val newSquare: Option[Square] = for {
+      for {
         f <- file
         r <- rank
-      } yield Square.values
-        .find(s => s.file == f && s.rank == r)
-        .get
-
-      newSquare
+      } yield Square.lookupSquare(f, r)
     }
   }
 }
