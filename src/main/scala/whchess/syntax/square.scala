@@ -42,7 +42,7 @@ object square {
     }
 
     // private members
-    private lazy val same = identity[Int] _
+    private lazy val same:     Int => Int = identity[Int]
     private lazy val next:     Int => Int = _ + 1
     private lazy val previous: Int => Int = _ - 1
 
