@@ -53,7 +53,7 @@ object square {
       enums.zipWithIndex.toMap
 
     private def getSquareFor(fileIndexTransformer: Int => Int)
-                            (rankIndexTransformer: Int => Int): Square = {
+                            (rankIndexTransformer: Int => Int): Option[Square] = {
 
       def reverse[A](enums: Map[A, Int]): Map[Int, A] =
         enums.map(_.swap)
@@ -63,12 +63,17 @@ object square {
 
       val newFileIndex = fileIndexTransformer(indexedFiles(square.file))
       val newRankIndex = rankIndexTransformer(indexedRanks(square.rank))
-      val file = reversedFiles.getOrElse(newFileIndex, square.file)
-      val rank = reversedRanks.getOrElse(newRankIndex, square.rank)
+      val file = reversedFiles.get(newFileIndex)
+      val rank = reversedRanks.get(newRankIndex)
 
-      Square.values
-        .find(s => s.file == file && s.rank == rank)
+      val newSquare: Option[Square] = for {
+        f <- file
+        r <- rank
+      } yield Square.values
+        .find(s => s.file == f && s.rank == r)
         .get
+
+      newSquare
     }
   }
 }
