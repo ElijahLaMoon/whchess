@@ -9,10 +9,23 @@ object Direction extends Enum[Direction] {
   sealed trait Straight extends Direction with EnumEntry
   object Straight extends Enum[Straight] {
 
-    case object Up        extends Straight
-    case object Down      extends Straight
-    case object Left      extends Straight
-    case object Right     extends Straight
+    sealed trait Vertical extends Straight with EnumEntry
+    object Vertical extends Enum[Vertical] {
+
+      case object Up        extends Vertical
+      case object Down      extends Vertical
+
+      lazy val values: IndexedSeq[Vertical] = findValues
+    }
+
+    sealed trait Horizontal extends Straight with EnumEntry
+    object Horizontal extends Enum[Horizontal] {
+
+      case object Left      extends Horizontal
+      case object Right     extends Horizontal
+
+      lazy val values: IndexedSeq[Horizontal] = findValues
+    }
 
     lazy val values: IndexedSeq[Straight] = findValues
   }
