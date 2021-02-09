@@ -1,7 +1,7 @@
 package whchess.syntax
 
 import whchess.domain._
-import Direction._, Straight._, Diagonal._
+import Direction._, Straight._, Vertical._, Horizontal._, Diagonal._
 
 object square {
   implicit class SquareOps(square: Square) {
