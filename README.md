@@ -7,6 +7,7 @@
 	2. [`syntax`](#syntax)
 3. [Problems](#problems)
 4. [Possible solutions to problems](#possible-solutions-to-problems)
+5. [How to run it](#how-to-run-it)
 
 ## Preface
 
@@ -131,3 +132,84 @@ For `Queen` or `Bishop` I could take diagonal `nonEmptySurroundings` and stack t
 There's a problem with defining if player is in check, and I'm not sure how to solve it yet. Probably by attaching some `Boolean` flag to the `Board` or something.
 
 From what I can see these are the only problems in code right now.
+
+## How to run it
+
+As I said, the code is incomplete but you can take a look at how it works anyway. So, to do this unzip the archive, open terminal and pass to it these lines:
+
+```
+sbt console
+```
+
+Then in Scala REPL:
+
+1. Import neccessary things
+
+```
+import whchess._, domain._, syntax._, square._, piece._, board._
+
+```
+
+2. Set up a board and create a `Move`
+
+```
+val initBoard = Board.initial
+val e2e4 = Move(Square.E2, Square.E4)
+```
+
+3. Apply the move and extract log and new board state
+
+```
+val (log, newBoard) = initBoard.mkMove(e2e4).run
+```
+4. To render the board and display log message run
+
+```
+log.foreach(println)
+println(newBoard.rendered)
+```
+
+and you should see the following result:
+
+```
+White Pawn goes from E2 to E4. Black player is in charge
+  A B C D E F G H
+8 r n b q k b n r 8
+7 p p p p p p p p 7
+6                 6
+5                 5
+4         P       4
+3                 3
+2 P P P P   P P P 2
+1 R N B Q K B N R 1
+  A B C D E F G H
+```
+
+You can play by manually creating `Move`s and applying them in this fashion to the board or you can copypaste this method:
+
+```
+import cats.data.Writer
+def applyAndRenderMoves(board: Board)(moves: Vector[Move]): Unit = {
+  @annotation.tailrec
+  def helper(writer: Writer[List[String], Board])(moves: Vector[Move]): Unit = {
+    val (log, board) = writer.run
+    if (moves.isEmpty) {
+      log.foreach(println)
+      println(board.rendered)
+    }
+    else {
+      val (newLog, newBoard) = board.mkMove(moves.head).run
+      log.foreach(println)
+      println(newBoard.rendered)
+      helper(Writer(newLog, newBoard))(moves.tail)
+    }
+  }
+  helper(Writer(List.empty, board))(moves)
+}
+```
+and then actually play valid moves provided with the assignment with these lines:
+
+```
+val validMoves = MoveParser.validMoves.run._2
+initBoard.applyAndRenderMoves(initBoard)(validMoves)
+```
