@@ -6,7 +6,13 @@ import whchess.syntax.piece._
 
 case class Board(current: Positions[Piece], playerInCharge: Player) {
 
-case class Board private (current: Positions) {
+  type PiecesWithPositions = Map[Piece, List[Square]]
+  lazy val piecesPositions: PiecesWithPositions = current
+    .groupBy(_._2)
+    .map    { case (op, positions) => op -> positions.keys.toList }
+    .filter { case (op, _) => op.nonEmpty }
+    .map    { case (op, squares) => op.get -> squares }
+
   override def toString: String = current.map {
     case (square, op) => op match {
       case Some(piece) => s"$piece is on $square"
