@@ -21,6 +21,7 @@ object square {
     lazy val leftBelow:  Option[Square] = getSquareFor(previous)(previous)
     lazy val rightBelow: Option[Square] = getSquareFor(next)(previous)
 
+    // contains information about the square in each direction
     lazy val surroundings: Map[Direction, Option[Square]] = Direction.values.map {
       case dir @ Up        => dir -> above
       case dir @ Down      => dir -> below
@@ -31,6 +32,10 @@ object square {
       case dir @ DownLeft  => dir -> leftBelow
       case dir @ DownRight => dir -> rightBelow
     }.toMap
+
+    lazy val nonEmptySurroundings: Map[Direction, Square] = surroundings
+      .filter { case (_, os)   => os.nonEmpty }
+      .map    { case (dir, os) => dir -> os.get }
 
     // private members
     private lazy val same:     Int => Int = identity[Int]
