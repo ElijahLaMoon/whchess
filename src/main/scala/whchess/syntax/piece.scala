@@ -2,7 +2,7 @@ package whchess.syntax
 
 import whchess.domain._
 import Square._
-import Piece._
+import Piece._, White._, Black._
 
 import square._
 
