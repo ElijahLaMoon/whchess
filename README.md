@@ -37,6 +37,7 @@ Unfortunately, I couldn't finish everything this project needs just in time. How
                 │   ├── Move.scala
                 │   ├── Piece.scala
                 │   ├── PieceType.scala
+                │   ├── Player.scala
                 │   ├── Rank.scala
                 │   └── Square.scala
                 ├── MoveParser.scala
@@ -45,7 +46,6 @@ Unfortunately, I couldn't finish everything this project needs just in time. How
                     ├── piece.scala
                     └── square.scala
 ```
-
 
 1. `data` folder contains samples of move data provided with the task
 2. `lib` folder contains a single Java library provided with the task and used to read moves from files
