@@ -1,10 +1,10 @@
 package whchess.domain
 
-import Color._
+import Piece._
 import Board.Positions
 import whchess.syntax.piece._
 
-import cats.data.Writer
+case class Board(current: Positions[Piece], playerInCharge: Player) {
 
 case class Board private (current: Positions) {
   override def toString: String = current.map {
@@ -17,19 +17,13 @@ case class Board private (current: Positions) {
 
 object Board {
 
-  type Positions = Map[Square, Option[Piece]]
+  type Positions[A <: Piece] = Map[Square, Option[A]]
 
-  lazy val initial = new Board(occupiedPositions ++ emptyPositions)
+  lazy val initial: Board = Board(occupiedPositions ++ emptyPositions, Player.White)
 
-  // make moves and log the state of the board
-  def mkMove(move: Move): Writer[List[String], Board] = ???
-  def mkMoves(moves: Move*): Writer[List[String], Board] = ???
-
-//  def apply(current: Positions): Board = new Board(current)
-
-  lazy val whitePositions: Positions = squaresFor(White)
-  lazy val blackPositions: Positions = squaresFor(Black)
-  lazy val emptyPositions: Positions = Square.values
+  lazy val whitePositions: Positions[White] = squaresFor(Piece.White.values)
+  lazy val blackPositions: Positions[Black] = squaresFor(Piece.Black.values)
+  lazy val emptyPositions: Positions[Piece] = Square.values
     .diff(occupiedPositions.keys.toSeq)
     .map(_ -> None)
     .toMap
@@ -37,10 +31,7 @@ object Board {
   // private members
   private lazy val occupiedPositions = whitePositions ++ blackPositions
 
-  private def squaresFor(color: Color): Positions = (color match {
-      case White => Piece.whites
-      case Black => Piece.blacks
-    }).keys
+  private def squaresFor[A <: Piece](coloredPieces: IndexedSeq[A]): Positions[A] = coloredPieces
     .flatMap(piece => piece.initialSquares.map(_ -> Option(piece)))
     .toMap
 }
