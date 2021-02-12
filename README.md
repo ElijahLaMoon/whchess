@@ -211,5 +211,5 @@ and then actually play valid moves provided with the assignment with these lines
 
 ```
 val validMoves = MoveParser.validMoves.run._2
-initBoard.applyAndRenderMoves(initBoard)(validMoves)
+applyAndRenderMoves(initBoard)(validMoves)
 ```
